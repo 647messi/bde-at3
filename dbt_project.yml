@@ -1,0 +1,9 @@
+name: 'bde_at3'
+version: '1.0.0'
+config-version: 2
+
+model-paths: ["models"]
+
+models:
+  bde_at3:
+    +materialized: view

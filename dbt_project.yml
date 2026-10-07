@@ -8,3 +8,6 @@ snapshot-paths: ["snapshots"]
 models:
   bde_at3:
     +materialized: view
+    gold:
+      +schema: gold
+      +materialized: table

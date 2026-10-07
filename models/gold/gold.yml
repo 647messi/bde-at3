@@ -1,0 +1,84 @@
+version: 2
+
+models:
+  - name: dim_host
+    columns:
+      - name: host_version_key
+        data_tests: [not_null, unique]
+      - name: host_id
+        data_tests: [not_null]
+      - name: valid_from
+        data_tests: [not_null]
+  - name: dim_listing
+    columns:
+      - name: listing_version_key
+        data_tests: [not_null, unique]
+      - name: listing_id
+        data_tests: [not_null]
+      - name: valid_from
+        data_tests: [not_null]
+  - name: dim_property
+    columns:
+      - name: property_version_key
+        data_tests: [not_null, unique]
+      - name: property_id
+        data_tests: [not_null]
+      - name: valid_from
+        data_tests: [not_null]
+  - name: dim_location
+    columns:
+      - name: location_version_key
+        data_tests: [not_null, unique]
+      - name: location_key
+        data_tests: [not_null]
+      - name: valid_from
+        data_tests: [not_null]
+  - name: ref_census_g01
+    columns:
+      - name: lga_code
+        data_tests: [not_null, unique]
+      - name: census_year
+        data_tests: [not_null]
+  - name: ref_census_g02
+    columns:
+      - name: lga_code
+        data_tests: [not_null, unique]
+      - name: census_year
+        data_tests: [not_null]
+  - name: fact_listing_monthly
+    description: One listing per observation month with historical dimension version keys.
+    columns:
+      - name: listing_id
+        data_tests: [not_null]
+      - name: scraped_date
+        data_tests: [not_null]
+      - name: month_date
+        data_tests: [not_null]
+      - name: listing_version_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_listing')
+                field: listing_version_key
+      - name: host_version_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_host')
+                field: host_version_key
+      - name: property_version_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_property')
+                field: property_version_key
+      - name: location_version_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_location')
+                field: location_version_key

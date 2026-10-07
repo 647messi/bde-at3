@@ -1,0 +1,62 @@
+version: 2
+
+models:
+  - name: int_lga_mapping
+    description: One row per normalized suburb, with explicit mapping status.
+    columns:
+      - name: suburb_name_key
+        data_tests: [not_null, unique]
+      - name: mapping_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['matched', 'ambiguous', 'unmatched']
+  - name: int_host
+    description: One earliest observed host record in the current monthly batch.
+    columns:
+      - name: host_id
+        data_tests: [not_null, unique]
+      - name: scraped_date
+        data_tests: [not_null]
+  - name: int_location
+    description: Observed listing neighbourhoods mapped directly to LGA names.
+    columns:
+      - name: location_key
+        data_tests: [not_null, unique]
+      - name: scraped_date
+        data_tests: [not_null]
+  - name: int_property
+    description: Listing-specific property configuration for snapshotting.
+    columns:
+      - name: property_id
+        data_tests: [not_null, unique]
+      - name: scraped_date
+        data_tests: [not_null]
+  - name: int_listing
+    description: One current-batch listing record containing its entity relationships.
+    columns:
+      - name: listing_id
+        data_tests: [not_null, unique]
+      - name: scraped_date
+        data_tests: [not_null]
+      - name: host_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_host')
+                field: host_id
+      - name: property_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_property')
+                field: property_id
+      - name: location_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_location')
+                field: location_key

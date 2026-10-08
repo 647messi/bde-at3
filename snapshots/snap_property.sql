@@ -5,11 +5,14 @@
         target_schema='silver',
         unique_key='property_id',
         strategy='timestamp',
-        updated_at='scraped_date'
+        updated_at='snapshot_updated_at'
     )
 }}
 
-select *
+-- Match the snapshot timestamp columns while preserving the observed date.
+select
+    *,
+    scraped_date::timestamp as snapshot_updated_at
 from {{ ref('int_property') }}
 
 {% endsnapshot %}

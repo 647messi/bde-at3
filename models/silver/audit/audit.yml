@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: audit_airbnb_date_anomalies
+    description: Persistent cross-month and missing-date rejections, replaced per source batch on reruns.
+    columns:
+      - name: source_table
+        data_tests: [not_null]
+      - name: listing_id
+        data_tests: [not_null]
+      - name: expected_month_date
+        data_tests: [not_null]
+      - name: rejection_reason
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['missing_scraped_date', 'scraped_date_outside_file_month']
+      - name: audited_at
+        data_tests: [not_null]

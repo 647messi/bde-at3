@@ -1,4 +1,5 @@
 {# Cast through text so both typed and text Bronze columns are supported. #}
+{% set batch = airbnb_batch() %}
 {% set columns = [
     'listing_id', 'scrape_id', 'scraped_date',
     'host_id', 'host_name', 'host_since', 'host_is_superhost',
@@ -16,7 +17,7 @@ with cleaned as (
         nullif(btrim({{ column }}::text), '') as {{ column }}{% if not loop.last %},{% endif %}
         {% endfor %}
     -- Set once on the dbt Cloud job so all three steps read the same monthly table.
-    from {{ source('bronze', env_var('DBT_AIRBNB_SOURCE_TABLE', 'airbnb_05_2020')) }}
+    from {{ source('bronze', batch['table']) }}
 ),
 
 typed as (
@@ -67,3 +68,5 @@ select
     *,
     date_trunc('month', scraped_date)::date as month_date
 from typed
+-- Keep only observations in the selected file month; Bronze remains unchanged.
+where date_trunc('month', scraped_date)::date = date '{{ batch["month_date"] }}'

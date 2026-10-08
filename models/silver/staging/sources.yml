@@ -10,3 +10,15 @@ sources:
       - name: nsw_lga_suburb
       - name: census_g01_nsw_lga
       - name: census_g02_nsw_lga
+      # part 3 - rest of source tables
+      - name: airbnb_06_2020
+      - name: airbnb_07_2020
+      - name: airbnb_08_2020
+      - name: airbnb_09_2020
+      - name: airbnb_10_2020
+      - name: airbnb_11_2020
+      - name: airbnb_12_2020
+      - name: airbnb_01_2021
+      - name: airbnb_02_2021
+      - name: airbnb_03_2021
+      - name: airbnb_04_2021

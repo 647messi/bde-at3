@@ -15,7 +15,7 @@ with cleaned as (
         {% for column in columns %}
         nullif(btrim({{ column }}::text), '') as {{ column }}{% if not loop.last %},{% endif %}
         {% endfor %}
-    from {{ source('bronze', 'airbnb_05_2020') }}
+    from {{ source('bronze', var('airbnb_source_table', 'airbnb_05_2020')) }} -- choose the source table used in pipeline
 ),
 
 typed as (

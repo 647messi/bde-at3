@@ -15,7 +15,8 @@ with cleaned as (
         {% for column in columns %}
         nullif(btrim({{ column }}::text), '') as {{ column }}{% if not loop.last %},{% endif %}
         {% endfor %}
-    from {{ source('bronze', var('airbnb_source_table', 'airbnb_05_2020')) }} -- choose the source table used in pipeline
+    -- Set once on the dbt Cloud job so all three steps read the same monthly table.
+    from {{ source('bronze', env_var('DBT_AIRBNB_SOURCE_TABLE', 'airbnb_05_2020')) }}
 ),
 
 typed as (
